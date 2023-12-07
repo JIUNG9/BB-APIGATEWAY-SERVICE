@@ -1,11 +1,11 @@
 package kr.bb.apigateway.common.security;
 
-import com.bit.lot.flower.auth.common.util.CookieUtil;
-import com.bit.lot.flower.auth.common.util.JwtUtil;
-import com.bit.lot.flower.auth.common.util.RedisRefreshTokenUtil;
-import com.bit.lot.flower.auth.common.valueobject.SecurityPolicyStaticValue;
 import java.time.Duration;
 import javax.servlet.http.HttpServletResponse;
+import kr.bb.apigateway.common.util.CookieUtil;
+import kr.bb.apigateway.common.util.JwtUtil;
+import kr.bb.apigateway.common.util.RedisRefreshTokenUtil;
+import kr.bb.apigateway.common.valueobject.SecurityPolicyStaticValue;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -38,9 +38,5 @@ public class IssueRefreshRefreshTokenInCookie implements
     redisRefreshTokenUtil.deleteRefreshToken(id);
   }
 
-  @Override
-  public void renewRefreshToken(String id, HttpServletResponse response) {
-
-  }
 
 }

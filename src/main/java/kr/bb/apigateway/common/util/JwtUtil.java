@@ -36,7 +36,7 @@ public class JwtUtil {
     return Jwts.builder()
         .setSubject(subject)
         .setIssuedAt(now)
-        .setExpiration(Date.from(Instant.now().plusMillis(
+        .setExpiration(Date.from(Instant.now().plusSeconds(
             Long.parseLong(SecurityPolicyStaticValue.ACCESS_EXPIRATION_TIME))))
         .signWith(accessSecret)
         .addClaims(claimsList)

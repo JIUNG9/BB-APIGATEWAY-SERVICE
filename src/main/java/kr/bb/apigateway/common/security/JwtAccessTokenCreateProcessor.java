@@ -1,7 +1,7 @@
 package kr.bb.apigateway.common.security;
 
-import com.bit.lot.flower.auth.common.util.JwtUtil;
 import java.util.Map;
+import kr.bb.apigateway.common.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

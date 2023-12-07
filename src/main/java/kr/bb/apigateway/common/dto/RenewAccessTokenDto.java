@@ -1,7 +1,8 @@
 package kr.bb.apigateway.common.dto;
 
-import com.bit.lot.flower.auth.common.valueobject.BaseId;
-import com.bit.lot.flower.auth.common.valueobject.Role;
+
+import kr.bb.apigateway.common.valueobject.BaseId;
+import kr.bb.apigateway.common.valueobject.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

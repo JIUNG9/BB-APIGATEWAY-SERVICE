@@ -1,7 +1,8 @@
 package kr.bb.apigateway.common.security;
 
-import com.bit.lot.flower.auth.common.util.RedisBlackListTokenUtil;
-import com.bit.lot.flower.auth.common.valueobject.SecurityPolicyStaticValue;
+
+import kr.bb.apigateway.common.util.RedisBlackListTokenUtil;
+import kr.bb.apigateway.common.valueobject.SecurityPolicyStaticValue;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

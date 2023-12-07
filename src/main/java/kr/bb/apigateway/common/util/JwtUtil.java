@@ -1,7 +1,6 @@
 package kr.bb.apigateway.common.util;
 
 
-import com.bit.lot.flower.auth.common.valueobject.SecurityPolicyStaticValue;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -14,6 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
+import kr.bb.apigateway.common.valueobject.SecurityPolicyStaticValue;
 import org.springframework.stereotype.Component;
 
 @Component

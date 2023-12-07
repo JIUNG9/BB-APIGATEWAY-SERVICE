@@ -1,14 +1,15 @@
 package kr.bb.apigateway.common.security;
 
-import com.bit.lot.flower.auth.common.util.JwtUtil;
-import com.bit.lot.flower.auth.common.valueobject.SecurityPolicyStaticValue;
-import com.bit.lot.flower.auth.social.valueobject.AuthId;
+
 import java.io.IOException;
 import java.util.Map;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import kr.bb.apigateway.common.util.JwtUtil;
+import kr.bb.apigateway.common.valueobject.AuthId;
+import kr.bb.apigateway.common.valueobject.SecurityPolicyStaticValue;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

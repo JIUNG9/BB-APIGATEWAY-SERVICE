@@ -46,12 +46,24 @@ public class JwtValidationGatewayFilter implements GlobalFilter {
       return response.setComplete();
     }
 
-    return chain.filter(exchange);
+    return chain.filter(addUserIdHeaderAtRequest(exchange,JwtUtil.extractSubject(token)));
   }
 
   private boolean shouldNotFilter(String requestURI) {
     return requestURI.contains(SwaggerRequestURI.UI_URI) ||
         requestURI.contains(SwaggerRequestURI.API_DOCS_URI) ||
         requestURI.contains(JWTAuthenticationShouldNotFilterAntMatcher.EMAIL_ANT);
+  }
+
+  private ServerWebExchange addUserIdHeaderAtRequest(ServerWebExchange exchange, String userId) {
+    ServerHttpRequest modifiedRequest = exchange.getRequest().mutate()
+        .header("userId", userId)
+        .build();
+
+    ServerWebExchange modifiedExchange = exchange.mutate()
+        .request(modifiedRequest)
+        .build();
+
+    return modifiedExchange;
   }
 }

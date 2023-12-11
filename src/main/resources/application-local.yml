@@ -1,8 +1,14 @@
 server:
   port: 8000
 spring:
+  main:
+    web-application-type: reactive
+  redis:
+    host: localhost
+    port: 6379
+
   application:
-    name: apigateway-service
+    name: apigateway-servixce
   config:
     activate:
       on-profile: local
@@ -14,3 +20,9 @@ management:
         include:
           - "refresh"
           - "bus-refresh"
+cookie:
+  refresh:
+    http:
+      domain: http://localhost:8000
+    token:
+      name: refresh-cookie

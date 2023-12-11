@@ -1,14 +1,19 @@
 server:
   port: 8000
 spring:
+  cloud:
+    gateway:
+      httpclient:
+        wiretap: true
+      httpserver:
+        wiretap: true
   main:
     web-application-type: reactive
   redis:
     host: localhost
     port: 6379
-
   application:
-    name: apigateway-servixce
+    name: apigateway-service
   config:
     activate:
       on-profile: local
@@ -26,3 +31,13 @@ cookie:
       domain: http://localhost:8000
     token:
       name: refresh-cookie
+
+logging:
+  level:
+    reactor:
+      netty: INFO
+    org:
+      springframework:
+        cloud:
+          gateway: TRACE
+

@@ -7,9 +7,11 @@ import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
+import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
+@Component
 public class StoreAuthorizationGatewayFilter implements GlobalFilter {
 
   @Override
@@ -18,9 +20,14 @@ public class StoreAuthorizationGatewayFilter implements GlobalFilter {
     String requestURI = request.getURI().getPath();
 
     if (shouldNotFilter(requestURI)) {
-      return chain.filter(exchange);
+      chain.filter(exchange);
+    } else {
+      return roleHandler(exchange,chain);
     }
+    return chain.filter(exchange);
+  }
 
+  private Mono<Void> roleHandler(ServerWebExchange exchange,GatewayFilterChain chain) {
     String role = getRoleFromHeader(exchange);
     if (StoreManagerStatus.ROLE_STORE_MANAGER_PENDING.name().equals(role)) {
       return handlePendingApproval(exchange);

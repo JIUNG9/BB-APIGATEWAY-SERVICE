@@ -7,9 +7,11 @@ import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
+import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
+@Component
 public class SystemAdminAuthorizationGatewayFilter implements GlobalFilter {
    @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
@@ -19,8 +21,7 @@ public class SystemAdminAuthorizationGatewayFilter implements GlobalFilter {
         if (shouldNotFilter(requestURI)) {
             return chain.filter(exchange);
         }
-
-        if (!isSystemAdmin(exchange)) {
+        else if (!isSystemAdmin(exchange)) {
             return handleUnauthorized(exchange);
         }
         return chain.filter(exchange);

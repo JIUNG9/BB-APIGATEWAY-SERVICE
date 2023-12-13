@@ -21,14 +21,13 @@ public class SocialAuthorizationGatewayFilter implements GlobalFilter {
         String requestURI = request.getURI().getPath();
 
         if (shouldNotFilter(requestURI)) {
-            return chain.filter(exchange);
+             chain.filter(exchange);
         }
-
-        if (!isAuthorizedUser(exchange)) {
+        else if (!isAuthorizedUser(exchange)) {
             return handleUnauthenticatedUser(exchange);
         }
 
-        return chain.filter(exchange);
+         return chain.filter(exchange);
     }
 
     private boolean shouldNotFilter(String requestURI) {

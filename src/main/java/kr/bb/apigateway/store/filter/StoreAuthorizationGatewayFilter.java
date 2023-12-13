@@ -14,12 +14,7 @@ public class StoreAuthorizationGatewayFilter implements GlobalFilter {
 
   @Override
   public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-    ServerHttpRequest request = exchange.getRequest();
-    String requestURI = request.getURI().getPath();
 
-    if (shouldNotFilter(requestURI)) {
-      return chain.filter(exchange);
-    }
 
     String role = getRoleFromHeader(exchange);
     if (StoreManagerStatus.ROLE_STORE_MANAGER_PENDING.name().equals(role)) {
@@ -30,10 +25,6 @@ public class StoreAuthorizationGatewayFilter implements GlobalFilter {
     return chain.filter(exchange);
   }
 
-  private boolean shouldNotFilter(String requestURI) {
-    return !requestURI.contains("/stores") || requestURI.contains("/stores/login") ||
-        requestURI.contains("/stores/signup") || requestURI.contains("/stores/emails");
-  }
 
   private String getRoleFromHeader(ServerWebExchange exchange) {
     return ExtractAuthorizationTokenUtil.extractRole(exchange.getRequest());

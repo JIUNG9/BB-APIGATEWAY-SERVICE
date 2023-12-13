@@ -13,21 +13,11 @@ import reactor.core.publisher.Mono;
 public class SystemAdminAuthorizationGatewayFilter implements GlobalFilter {
    @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-        ServerHttpRequest request = exchange.getRequest();
-        String requestURI = request.getURI().getPath();
-
-        if (shouldNotFilter(requestURI)) {
-            return chain.filter(exchange);
-        }
 
         if (!isSystemAdmin(exchange)) {
             return handleUnauthorized(exchange);
         }
         return chain.filter(exchange);
-    }
-
-    private boolean shouldNotFilter(String requestURI) {
-        return !requestURI.contains("/admin") || requestURI.contains("/admin/login");
     }
 
     private boolean isSystemAdmin(ServerWebExchange exchange) {

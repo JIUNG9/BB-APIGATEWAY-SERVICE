@@ -17,12 +17,6 @@ public class SocialAuthorizationGatewayFilter implements GlobalFilter {
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-        ServerHttpRequest request = exchange.getRequest();
-        String requestURI = request.getURI().getPath();
-
-        if (shouldNotFilter(requestURI)) {
-            return chain.filter(exchange);
-        }
 
         if (!isAuthorizedUser(exchange)) {
             return handleUnauthenticatedUser(exchange);
@@ -31,9 +25,6 @@ public class SocialAuthorizationGatewayFilter implements GlobalFilter {
         return chain.filter(exchange);
     }
 
-    private boolean shouldNotFilter(String requestURI) {
-        return !requestURI.contains("/social") || requestURI.contains("/social/login");
-    }
 
     private boolean isAuthorizedUser(ServerWebExchange exchange) {
         String role = ExtractAuthorizationTokenUtil.extractRole(exchange.getRequest());

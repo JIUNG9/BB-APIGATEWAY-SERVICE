@@ -29,30 +29,44 @@ public class JwtValidationGatewayFilter implements GlobalFilter {
 
     if (shouldNotFilter(requestURI)) {
       return chain.filter(exchange);
-    }
+    } else {
+      String token = ExtractAuthorizationTokenUtil.extractToken(exchange.getRequest());
+      if (redisBlackListTokenUtil.isTokenBlacklisted(token)) {
+        ServerHttpResponse response = exchange.getResponse();
+        response.setStatusCode(HttpStatus.UNAUTHORIZED);
+        return response.setComplete();
+      }
 
-    String token = ExtractAuthorizationTokenUtil.extractToken(exchange.getRequest());
-    if (redisBlackListTokenUtil.isTokenBlacklisted(token)) {
-      ServerHttpResponse response = exchange.getResponse();
-      response.setStatusCode(HttpStatus.UNAUTHORIZED);
-      return response.setComplete();
-    }
+      try {
+        JwtUtil.isTokenValid(token);
+      } catch (ExpiredJwtException e) {
+        ServerHttpResponse response = exchange.getResponse();
+        response.setStatusCode(HttpStatus.UNAUTHORIZED);
+        return response.setComplete();
+      }
 
-    try {
-      JwtUtil.isTokenValid(token);
-    } catch (ExpiredJwtException e) {
-      ServerHttpResponse response = exchange.getResponse();
-      response.setStatusCode(HttpStatus.UNAUTHORIZED);
-      return response.setComplete();
+      return chain.filter(addUserIdHeaderAtRequest(exchange, JwtUtil.extractSubject(token)));
     }
-
-    return chain.filter(addUserIdHeaderAtRequest(exchange,JwtUtil.extractSubject(token)));
   }
 
   private boolean shouldNotFilter(String requestURI) {
-    return requestURI.contains(SwaggerRequestURI.UI_URI) ||
+    return shouldNotFilterSwaggerURI(requestURI) ||
+        shouldNotFilterSystemPolicyURI(requestURI);
+  }
+
+  private boolean shouldNotFilterSwaggerURI(String requestURI) {
+    return requestURI.contains(SwaggerRequestURI.RESOURCES) ||
+        requestURI.contains(SwaggerRequestURI.UI_URI) ||
+        requestURI.contains(SwaggerRequestURI.WEB_JARS) ||
         requestURI.contains(SwaggerRequestURI.API_DOCS_URI) ||
-        requestURI.contains(JWTAuthenticationShouldNotFilterAntMatcher.EMAIL_ANT);
+        requestURI.contains(SwaggerRequestURI.FAVICON);
+  }
+
+  private boolean shouldNotFilterSystemPolicyURI(String requestURI) {
+    return requestURI.contains(JWTAuthenticationShouldNotFilterAntMatcher.EMAIL_ANT) ||
+        requestURI.contains(JWTAuthenticationShouldNotFilterAntMatcher.LOGIN_ANT) ||
+        requestURI.contains(JWTAuthenticationShouldNotFilterAntMatcher.SIGNUP_ANT);
+
   }
 
   private ServerWebExchange addUserIdHeaderAtRequest(ServerWebExchange exchange, String userId) {
@@ -60,10 +74,8 @@ public class JwtValidationGatewayFilter implements GlobalFilter {
         .header("userId", userId)
         .build();
 
-    ServerWebExchange modifiedExchange = exchange.mutate()
+    return exchange.mutate()
         .request(modifiedRequest)
         .build();
-
-    return modifiedExchange;
   }
 }

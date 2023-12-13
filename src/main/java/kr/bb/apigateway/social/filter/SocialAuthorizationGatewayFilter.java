@@ -32,7 +32,7 @@ public class SocialAuthorizationGatewayFilter implements GlobalFilter {
 
     private boolean shouldNotFilter(String requestURI) {
         return !requestURI.contains("/social") || requestURI.contains("/social/login")
-            || requestURI.contains("/oauth");
+            || requestURI.contains("/oauth2");
     }
 
     private boolean isAuthorizedUser(ServerWebExchange exchange) {

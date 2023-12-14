@@ -1,7 +1,6 @@
 package kr.bb.apigateway.common;
 
 
-import kr.bb.apigateway.systsem.filter.SystemAdminAuthorizationGatewayFilter;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.context.annotation.Bean;

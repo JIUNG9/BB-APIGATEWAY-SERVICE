@@ -1,7 +1,6 @@
 package kr.bb.apigateway.common.util;
 
 import io.jsonwebtoken.Claims;
-import javax.servlet.http.HttpServletRequest;
 import kr.bb.apigateway.common.valueobject.SecurityPolicyStaticValue;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.server.reactive.ServerHttpRequest;

@@ -5,6 +5,7 @@ import kr.bb.apigateway.common.util.ExtractAuthorizationTokenUtil;
 import kr.bb.apigateway.common.util.JwtUtil;
 import kr.bb.apigateway.common.util.RedisBlackListTokenUtil;
 import kr.bb.apigateway.common.valueobject.JWTAuthenticationShouldNotFilterAntMatcher;
+import kr.bb.apigateway.common.valueobject.Oauth2RequestURI;
 import kr.bb.apigateway.common.valueobject.SwaggerRequestURI;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
@@ -51,7 +52,8 @@ public class JwtValidationGatewayFilter implements GlobalFilter {
 
   private boolean shouldNotFilter(String requestURI) {
     return shouldNotFilterSwaggerURI(requestURI) ||
-        shouldNotFilterSystemPolicyURI(requestURI);
+        shouldNotFilterSystemPolicyURI(requestURI) ||
+        shouldNotFilterOauth2(requestURI);
   }
 
   private boolean shouldNotFilterSwaggerURI(String requestURI) {
@@ -69,6 +71,10 @@ public class JwtValidationGatewayFilter implements GlobalFilter {
 
   }
 
+  private boolean shouldNotFilterOauth2(String requestURI){
+      return requestURI.contains(Oauth2RequestURI.OAUTH2_REQUEST);
+  }
+
   private ServerWebExchange addUserIdHeaderAtRequest(ServerWebExchange exchange, String userId) {
     ServerHttpRequest modifiedRequest = exchange.getRequest().mutate()
         .header("userId", userId)
@@ -78,4 +84,6 @@ public class JwtValidationGatewayFilter implements GlobalFilter {
         .request(modifiedRequest)
         .build();
   }
+
+
 }

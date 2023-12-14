@@ -2,7 +2,6 @@ package kr.bb.apigateway.common.valueobject;
 
 public class Oauth2RequestURI {
 
-  public static String OAUTH2_REQUEST ="/oauth2";
-
+  public static String OAUTH2_REQUEST ="/api/auth/oauth2/authorization";
 
 }

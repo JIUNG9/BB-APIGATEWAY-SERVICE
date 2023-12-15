@@ -4,6 +4,7 @@ package kr.bb.apigateway.store.filter;
 import kr.bb.apigateway.common.util.ExtractAuthorizationTokenUtil;
 import kr.bb.apigateway.store.exception.StoreManagerAuthException;
 import kr.bb.apigateway.store.valueobject.StoreManagerStatus;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
@@ -17,10 +18,18 @@ import reactor.core.publisher.Mono;
 @Slf4j
 @Component
 public class StoreAuthorizationGatewayFilterFactory extends
-    AbstractGatewayFilterFactory<StoreAuthorizationGatewayFilterFactory.Config> {
+    AbstractGatewayFilterFactory<StoreAuthorizationGatewayFilterFactory.NameConfig> {
+
+  public StoreAuthorizationGatewayFilterFactory() {
+  }
+
+  public StoreAuthorizationGatewayFilterFactory(
+      Class<NameConfig> configClass) {
+    super(configClass);
+  }
 
   @Override
-  public GatewayFilter apply(Config config) {
+  public GatewayFilter apply(NameConfig config) {
     return this::roleHandler;
   }
 
@@ -51,16 +60,5 @@ public class StoreAuthorizationGatewayFilterFactory extends
     throw new StoreManagerAuthException("사용자의 사업자 등록증이 거절되었습니다 재등록하세요.");
   }
 
-  public static class Config {
 
-    private boolean shouldFilter;
-
-    public boolean getShouldNotFilter() {
-      return shouldFilter;
-    }
-
-    public void setShouldNotFilter(boolean shouldFilter) {
-      this.shouldFilter = shouldFilter;
-    }
-  }
 }

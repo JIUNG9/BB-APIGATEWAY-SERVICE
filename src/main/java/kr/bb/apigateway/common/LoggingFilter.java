@@ -7,6 +7,7 @@ import static org.springframework.cloud.gateway.support.ServerWebExchangeUtils.G
 import java.net.URI;
 import java.util.Collections;
 import java.util.Set;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
@@ -30,4 +31,6 @@ public class LoggingFilter implements GlobalFilter {
         + ", uri:" + routeUri);
     return chain.filter(exchange);
   }
+
+
 }

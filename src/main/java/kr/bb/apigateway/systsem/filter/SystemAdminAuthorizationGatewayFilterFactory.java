@@ -3,12 +3,10 @@ package kr.bb.apigateway.systsem.filter;
 import kr.bb.apigateway.common.util.ExtractAuthorizationTokenUtil;
 import kr.bb.apigateway.common.valueobject.Role;
 import kr.bb.apigateway.systsem.exception.SystemAdminAuthException;
-import kr.bb.apigateway.systsem.filter.SystemAdminAuthorizationGatewayFilterFactory.Config;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
@@ -17,14 +15,20 @@ import reactor.core.publisher.Mono;
 @Slf4j
 @Component
 public class SystemAdminAuthorizationGatewayFilterFactory extends
-    AbstractGatewayFilterFactory<Config> {
+    AbstractGatewayFilterFactory<AbstractGatewayFilterFactory.NameConfig> {
+
 
   public SystemAdminAuthorizationGatewayFilterFactory() {
-    super(Config.class);
+    super(NameConfig.class);
+  }
+
+  public SystemAdminAuthorizationGatewayFilterFactory(
+      Class<NameConfig> configClass) {
+    super(configClass);
   }
 
   @Override
-  public GatewayFilter apply(Config config) {
+  public GatewayFilter apply(NameConfig config) {
     return (exchange, chain) -> {
        if (!isSystemAdmin(exchange)) {
         return handleUnauthorized(exchange);
@@ -45,16 +49,5 @@ public class SystemAdminAuthorizationGatewayFilterFactory extends
     throw new SystemAdminAuthException("존재 하지 않는 시스템 어드민 유저입니다.");
   }
 
-  public static class Config {
 
-    private boolean shouldFilter;
-
-    public boolean getShouldNotFilter() {
-      return shouldFilter;
-    }
-
-    public void setShouldNotFilter(boolean shouldFilter) {
-      this.shouldFilter = shouldFilter;
-    }
-  }
 }

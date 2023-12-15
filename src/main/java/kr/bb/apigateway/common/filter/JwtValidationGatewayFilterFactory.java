@@ -4,6 +4,7 @@ import io.jsonwebtoken.ExpiredJwtException;
 import kr.bb.apigateway.common.util.ExtractAuthorizationTokenUtil;
 import kr.bb.apigateway.common.util.JwtUtil;
 import kr.bb.apigateway.common.util.RedisBlackListTokenUtil;
+import lombok.RequiredArgsConstructor;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.http.HttpStatus;
@@ -15,16 +16,17 @@ import reactor.core.publisher.Mono;
 
 @Component
 public class JwtValidationGatewayFilterFactory extends
-    AbstractGatewayFilterFactory<JwtValidationGatewayFilterFactory.Config> {
+    AbstractGatewayFilterFactory<JwtValidationGatewayFilterFactory.NameConfig> {
 
   private final RedisBlackListTokenUtil redisBlackListTokenUtil;
 
   public JwtValidationGatewayFilterFactory(RedisBlackListTokenUtil redisBlackListTokenUtil) {
+    super(NameConfig.class);
     this.redisBlackListTokenUtil = redisBlackListTokenUtil;
   }
 
   @Override
-  public GatewayFilter apply(Config config) {
+  public GatewayFilter apply(NameConfig config) {
     return (exchange, chain) -> {
       ServerHttpRequest request = exchange.getRequest();
       String token = ExtractAuthorizationTokenUtil.extractToken(request);
@@ -58,17 +60,4 @@ public class JwtValidationGatewayFilterFactory extends
         .build();
   }
 
-
-  public static class Config {
-
-    private boolean shouldNotFilter;
-
-    public boolean getShouldNotFilter() {
-      return shouldNotFilter;
-    }
-
-    public void setShouldNotURL(boolean shouldNotFilter) {
-      this.shouldNotFilter = shouldNotFilter;
-    }
-  }
 }

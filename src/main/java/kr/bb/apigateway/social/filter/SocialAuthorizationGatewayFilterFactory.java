@@ -4,6 +4,7 @@ package kr.bb.apigateway.social.filter;
 import kr.bb.apigateway.common.util.ExtractAuthorizationTokenUtil;
 import kr.bb.apigateway.common.valueobject.Role;
 import kr.bb.apigateway.social.exception.SocialAuthException;
+import lombok.Data;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.http.HttpStatus;
@@ -14,10 +15,19 @@ import reactor.core.publisher.Mono;
 
 @Component
 public class SocialAuthorizationGatewayFilterFactory extends
-    AbstractGatewayFilterFactory<SocialAuthorizationGatewayFilterFactory.Config> {
+    AbstractGatewayFilterFactory<SocialAuthorizationGatewayFilterFactory.NameConfig> {
+
+
+    public SocialAuthorizationGatewayFilterFactory() {
+    }
+
+    public SocialAuthorizationGatewayFilterFactory(
+        Class<NameConfig> configClass) {
+        super(configClass);
+    }
 
     @Override
-    public GatewayFilter apply(Config config) {
+    public GatewayFilter apply(NameConfig config) {
         return (exchange, chain) -> {
             if (!isAuthorizedUser(exchange)) {
                 return handleUnauthenticatedUser(exchange);
@@ -37,17 +47,5 @@ public class SocialAuthorizationGatewayFilterFactory extends
         throw new SocialAuthException("소셜 유저가 아닙니다.");
     }
 
-    public static class Config {
-
-        private boolean shouldFilter;
-
-        public boolean getShouldNotFilter() {
-            return shouldFilter;
-        }
-
-        public void setShouldNotFilter(boolean shouldFilter) {
-            this.shouldFilter = shouldFilter;
-        }
-    }
 
 }

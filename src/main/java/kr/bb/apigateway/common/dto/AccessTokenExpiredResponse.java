@@ -12,8 +12,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class RenewAccessTokenDto<T extends BaseId> {
-  T authId;
+public class AccessTokenExpiredResponse<ID extends BaseId> {
+  ID id;
   Role role;
 
 }

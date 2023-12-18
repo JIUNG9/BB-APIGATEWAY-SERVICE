@@ -4,12 +4,21 @@ import io.jsonwebtoken.Claims;
 import kr.bb.apigateway.common.valueobject.SecurityPolicyStaticValue;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.server.reactive.ServerHttpRequest;
+import org.springframework.web.server.ServerWebExchange;
 
 public class ExtractAuthorizationTokenUtil {
 
 
   private ExtractAuthorizationTokenUtil() {
 
+  }
+
+  public static boolean isThereToken(ServerHttpRequest request) {
+    HttpHeaders headers = request.getHeaders();
+    String authorizationHeader = headers.getFirst(
+        SecurityPolicyStaticValue.TOKEN_AUTHORIZAION_HEADER_NAME);
+    return authorizationHeader != null && authorizationHeader.startsWith(
+        SecurityPolicyStaticValue.TOKEN_AUTHORIZATION_PREFIX);
   }
 
   public static String extractToken(ServerHttpRequest request) {

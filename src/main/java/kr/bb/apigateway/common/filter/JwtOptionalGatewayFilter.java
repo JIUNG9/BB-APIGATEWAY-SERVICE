@@ -15,20 +15,26 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 @Component
-public class JwtValidationGatewayFilterFactory extends
-    AbstractGatewayFilterFactory<JwtValidationGatewayFilterFactory.NameConfig> {
+public class JwtOptionalGatewayFilter extends
+    AbstractGatewayFilterFactory<AbstractGatewayFilterFactory.NameConfig> {
 
   private final RedisBlackListTokenUtil redisBlackListTokenUtil;
 
-  public JwtValidationGatewayFilterFactory(RedisBlackListTokenUtil redisBlackListTokenUtil) {
+  public JwtOptionalGatewayFilter(RedisBlackListTokenUtil redisBlackListTokenUtil) {
     super(NameConfig.class);
     this.redisBlackListTokenUtil = redisBlackListTokenUtil;
   }
 
-
   @Override
   public GatewayFilter apply(NameConfig config) {
-    return this::handleWhenThereIsToken;
+    return (exchange, chain) -> {
+      ServerHttpRequest request = exchange.getRequest();
+      if (ExtractAuthorizationTokenUtil.isThereToken(request)) {
+        return handleWhenThereIsToken(exchange, chain);
+      } else {
+        return chain.filter(exchange);
+      }
+    };
   }
 
   private void checkTokenIsBlackListed(String token) {
@@ -46,12 +52,14 @@ public class JwtValidationGatewayFilterFactory extends
     try {
       JwtUtil.isTokenValid(token);
       return chain.filter(
-          GatewayTokenHandlerUtil.addUserIdHeaderAtRequest(exchange, JwtUtil.extractSubject(token)));
+          GatewayTokenHandlerUtil.addUserIdHeaderAtRequest(exchange,
+              JwtUtil.extractSubject(token)));
     } catch (ExpiredJwtException e) {
       return GatewayTokenHandlerUtil.handleExpiredToken(e, exchange, HttpStatus.UNAUTHORIZED);
     } catch (IllegalArgumentException e) {
       throw new IllegalArgumentException("올바르지 않은 토큰입니다.");
     }
   }
+
 
 }

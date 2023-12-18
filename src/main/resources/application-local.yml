@@ -41,3 +41,7 @@ logging:
         cloud:
           gateway: TRACE
 
+encrypt:
+  key:
+    access: access-keyaccess-keyaccess-keyaccess-keyaccess-keyaccess-keyaccess-key
+    refresh: refresh-keyrefresh-keyrefresh-keyrefresh-keyrefresh-keyrefresh-keyfresh-key

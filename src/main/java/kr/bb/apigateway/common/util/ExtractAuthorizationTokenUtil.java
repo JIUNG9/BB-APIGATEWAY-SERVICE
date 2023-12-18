@@ -4,7 +4,6 @@ import io.jsonwebtoken.Claims;
 import kr.bb.apigateway.common.valueobject.SecurityPolicyStaticValue;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.server.reactive.ServerHttpRequest;
-import org.springframework.web.server.ServerWebExchange;
 
 public class ExtractAuthorizationTokenUtil {
 
@@ -40,7 +39,7 @@ public class ExtractAuthorizationTokenUtil {
 
     public static String extractRole(ServerHttpRequest request) {
     String token = ExtractAuthorizationTokenUtil.extractToken(request);
-    Claims claims = JwtUtil.extractClaims(token);
+    Claims claims = JwtUtil.extractAccessTokenClaims(token);
     return (String) claims.get(SecurityPolicyStaticValue.CLAIMS_ROLE_KEY_NAME);
   }
 

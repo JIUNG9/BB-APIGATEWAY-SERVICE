@@ -6,114 +6,50 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
-import java.security.NoSuchAlgorithmException;
-import java.time.Instant;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import javax.crypto.KeyGenerator;
-import javax.crypto.SecretKey;
-import kr.bb.apigateway.common.valueobject.SecurityPolicyStaticValue;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
 public class JwtUtil {
 
+  public static String accessKey;
+  public static String refreshKey;
 
-  private JwtUtil(){
+  private JwtUtil() {
 
   }
-  private static SecretKey accessSecret;
-  private static SecretKey refreshSecret;
 
-
-
-  public static String generateAccessTokenWithClaims(String subject,
-      Map<String, Object> claimsList) {
-    Date now = new Date();
-
-    initAccessKey();
-    return Jwts.builder()
-        .setSubject(subject)
-        .setIssuedAt(now)
-        .setExpiration(Date.from(Instant.now().plusSeconds(
-            Long.parseLong(SecurityPolicyStaticValue.ACCESS_EXPIRATION_TIME))))
-        .signWith(accessSecret)
-        .addClaims(claimsList)
-        .compact();
+  @Value("${encrypt.key.access}")
+  private void setAccessKey(String accessKey) {
+    JwtUtil.accessKey = accessKey;
   }
 
-  public static Map<String, Object> addClaims(String id, Object value) {
-    Map<String, Object> claims = new HashMap<>();
-    claims.put(id, value);
-    return claims;
-  }
-
-  public static String
-  generateAccessToken(String subject) {
-    Date now = new Date();
-
-    initAccessKey();
-    return Jwts.builder()
-        .setSubject(subject)
-        .setIssuedAt(now)
-        .setExpiration(Date.from(Instant.now().plusSeconds(
-            Long.parseLong(SecurityPolicyStaticValue.ACCESS_EXPIRATION_TIME))))
-        .signWith(accessSecret)
-        .compact();
-  }
-
-  public static String generateRefreshToken(String subject) {
-    Date now = new Date();
-    initRefreshKey();
-
-    return Jwts.builder()
-        .setSubject(subject)
-        .setIssuedAt(now)
-        .setExpiration(Date.from(Instant.now().plusSeconds(
-            Long.parseLong(SecurityPolicyStaticValue.REFRESH_EXPIRATION_TIME))))
-        .signWith(refreshSecret)
-        .compact();
+  @Value("${encrypt.key.refresh}")
+  private void setRefreshKey(String refreshKey) {
+    JwtUtil.refreshKey = refreshKey;
   }
 
   public static String extractSubject(String token) {
-    return extractClaims(token).getSubject();
+    return extractAccessTokenClaims(token).getSubject();
   }
 
-  public static Claims extractClaims(String token) {
-    return Jwts.parserBuilder().setSigningKey(accessSecret).build().parseClaimsJws(token)
+  public static Claims extractAccessTokenClaims(String token) {
+    return Jwts.parserBuilder()
+        .setSigningKey(accessKey.getBytes()).build()
+        .parseClaimsJws(token)
         .getBody();
   }
 
   public static boolean isTokenValid(String token) {
     try {
-      extractClaims(token);
+      extractAccessTokenClaims(token);
       return true;
     } catch (ExpiredJwtException e) {
-      throw new ExpiredJwtException(e.getHeader(),e.getClaims(),e.getMessage()) {
+      throw new ExpiredJwtException(e.getHeader(), e.getClaims(), e.getMessage()) {
       };
     } catch (MalformedJwtException | UnsupportedJwtException | IllegalArgumentException e) {
       throw new IllegalArgumentException("올바르지 않은 접근입니다.");
     }
   }
 
-    private static void initRefreshKey() {
-      try {
-        refreshSecret = KeyGenerator.getInstance("HmacSHA256").generateKey();
-
-      } catch (NoSuchAlgorithmException e) {
-        throw new IllegalArgumentException("plz init the secret key");
-      }
-    }
-
-
-    private static void initAccessKey() {
-      try {
-        accessSecret = KeyGenerator.getInstance("HmacSHA256").generateKey();
-
-      } catch (NoSuchAlgorithmException e) {
-        throw new IllegalArgumentException("plz init the secret key");
-      }
-
-    }
-  }
+}

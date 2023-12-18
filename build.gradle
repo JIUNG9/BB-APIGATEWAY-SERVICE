@@ -36,9 +36,13 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     implementation "org.springframework.cloud:spring-cloud-starter-bus-kafka"
     implementation 'org.springframework.data:spring-data-redis'
-    implementation 'io.jsonwebtoken:jjwt-impl:0.11.2'
     implementation 'org.springframework.kafka:spring-kafka'
     implementation 'redis.clients:jedis'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis-reactive'
+    implementation 'io.jsonwebtoken:jjwt-impl:0.11.1'
+    runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.2'
+    runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.2'
+
 }
 
 dependencyManagement {

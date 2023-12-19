@@ -1,22 +1,28 @@
 package kr.bb.apigateway.common.util;
 
 import java.util.concurrent.TimeUnit;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 
-@RequiredArgsConstructor
+@NoArgsConstructor
 @Component
-public class
-RedisRefreshTokenUtil {
+public class RedisRefreshTokenUtil {
 
-    private final RedisTemplate<Object, Object> redisTemplate;
+    private RedisTemplate<Object, Object> redisTemplate;
+
+    public RedisRefreshTokenUtil(
+        RedisTemplate<Object, Object> redisTemplate) {
+        this.redisTemplate = redisTemplate;
+    }
+
 
     public void
     saveRefreshToken(String userId, String refreshToken, long expirationTimeInSeconds) {
         String key = getRefreshTokenKey(userId);
-        redisTemplate.opsForValue().set(key, refreshToken, expirationTimeInSeconds, TimeUnit.SECONDS);
+        redisTemplate.opsForValue()
+            .set(key, refreshToken, expirationTimeInSeconds, TimeUnit.SECONDS);
     }
 
     public String getRefreshToken(String userId) {

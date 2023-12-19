@@ -1,6 +1,7 @@
 server:
   port: 8000
 spring:
+
   cloud:
     gateway:
       httpclient:
@@ -10,8 +11,10 @@ spring:
   main:
     web-application-type: reactive
   redis:
-    host: localhost
+    host: redis
     port: 6379
+    password: 123456
+
   application:
     name: apigateway-service
   config:

@@ -17,11 +17,6 @@ management:
           - "refresh"
           - "bus-refresh"
 
-cookie:
-  refresh:
-    http:
-      domain: http://localhost:8000
-    token:
-      name: refresh-cookie
+
 
 

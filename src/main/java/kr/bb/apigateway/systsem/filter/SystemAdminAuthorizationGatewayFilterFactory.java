@@ -22,10 +22,6 @@ public class SystemAdminAuthorizationGatewayFilterFactory extends
     super(NameConfig.class);
   }
 
-  public SystemAdminAuthorizationGatewayFilterFactory(
-      Class<NameConfig> configClass) {
-    super(configClass);
-  }
 
   @Override
   public GatewayFilter apply(NameConfig config) {

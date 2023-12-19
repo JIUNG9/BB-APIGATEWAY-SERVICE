@@ -2,6 +2,7 @@ package kr.bb.apigateway.common.util;
 
 import java.util.concurrent.TimeUnit;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
@@ -10,10 +11,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class RedisRefreshTokenUtil {
 
-    private RedisTemplate<Object, Object> redisTemplate;
+    private RedisTemplate<String, Object> redisTemplate;
 
+    @Autowired
     public RedisRefreshTokenUtil(
-        RedisTemplate<Object, Object> redisTemplate) {
+        RedisTemplate<String, Object> redisTemplate) {
         this.redisTemplate = redisTemplate;
     }
 

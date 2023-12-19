@@ -16,7 +16,7 @@ import reactor.core.publisher.Mono;
 
 @Component
 public class JwtOptionalGatewayFilter extends
-    AbstractGatewayFilterFactory<AbstractGatewayFilterFactory.NameConfig> {
+    AbstractGatewayFilterFactory<JwtOptionalGatewayFilter.NameConfig> {
 
   private final RedisBlackListTokenUtil redisBlackListTokenUtil;
 

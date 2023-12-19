@@ -17,13 +17,8 @@ import reactor.core.publisher.Mono;
 public class SocialAuthorizationGatewayFilterFactory extends
     AbstractGatewayFilterFactory<SocialAuthorizationGatewayFilterFactory.NameConfig> {
 
-
     public SocialAuthorizationGatewayFilterFactory() {
-    }
-
-    public SocialAuthorizationGatewayFilterFactory(
-        Class<NameConfig> configClass) {
-        super(configClass);
+        super(NameConfig.class);
     }
 
     @Override

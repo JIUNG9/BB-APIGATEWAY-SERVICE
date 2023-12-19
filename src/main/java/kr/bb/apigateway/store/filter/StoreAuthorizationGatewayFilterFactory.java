@@ -20,12 +20,9 @@ import reactor.core.publisher.Mono;
 public class StoreAuthorizationGatewayFilterFactory extends
     AbstractGatewayFilterFactory<StoreAuthorizationGatewayFilterFactory.NameConfig> {
 
-  public StoreAuthorizationGatewayFilterFactory() {
-  }
 
-  public StoreAuthorizationGatewayFilterFactory(
-      Class<NameConfig> configClass) {
-    super(configClass);
+  public StoreAuthorizationGatewayFilterFactory() {
+    super(NameConfig.class);
   }
 
   @Override

@@ -22,13 +22,13 @@ sudo apt-get install redis
 redis-cli -h host -p port -a password
 ```
 
-
-## Deployment
-
-
 ## API Documentation
 
+https://www.notion.so/0acd63e526144ac3aeac0bea0413704a?pvs=4
 
+### ERD
+
+https://www.erdcloud.com/d/PSD5Cgi6GrFQbdxgK
 
 ## Architecture
 

@@ -6,6 +6,22 @@ This is the Spring cloud API Gateway server. which is for routing for appropriat
 
 ## Getting Started
 
+### Prerequisites
+
+#### Install(Mac brew)
+```
+brew install redis
+```
+#### Install(Window)
+```
+sudo apt-get install redis
+```
+
+#### Usage
+```
+redis-cli -h host -p port -a password
+```
+
 
 ## Deployment
 

@@ -17,11 +17,58 @@ brew install redis
 sudo apt-get install redis
 ```
 
-#### Usage
+### Usage 
+
+#### Redis
 ```
 redis-cli -h host -p port -a password
 ```
 
+## Configuration
+
+### Routing
+```
+spring:
+  cloud:
+    config:
+      name: apigateway-service
+    gateway:
+      routes:
+
+        # product
+        - id: product-service
+          uri: lb://PRODUCT-SERVICE
+          predicates:
+            - Path=/api/products/**
+            - Method=GET,POST,OPTIONS,PUT,DELETE
+          filters:
+            - RewritePath=/api/products/(?<segment>.*), /$\{segment}
+            - name: JwtOptionalGatewayFilter
+
+        # delivery store manager
+        - id: delivery-service
+          uri: lb://DELIVERY-SERVICE
+          predicates:
+            - Path=/api/delivery/{variable:.*}/**
+            - Method=GET,POST,OPTIONS,PUT,DELETE,PATCH
+          filters:
+            - RewritePath=/api/delivery/(?<segment>.*), /$\{segment}
+            - name: JwtValidation
+            - name: StoreAuthorization
+
+        # delivery customer
+        - id: delivery-service
+          uri: lb://DELIVERY-SERVICE
+          predicates:
+            - Path=/api/delivery/**
+            - Method=GET,POST,OPTIONS,PUT,DELETE,PATCH
+          filters:
+            - RewritePath=/api/delivery/(?<segment>.*), /$\{segment}
+            - name: JwtValidation
+            - name: SocialAuthorization
+
+
+```
 ## API Documentation
 
 https://www.notion.so/0acd63e526144ac3aeac0bea0413704a?pvs=4

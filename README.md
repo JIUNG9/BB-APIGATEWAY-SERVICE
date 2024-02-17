@@ -1,5 +1,5 @@
 
-# MICROSERVICE.API-GATEWAY
+# Blooming-blooms MICROSERVICE.API-GATEWAY
 
 ## Description
 This is the Spring cloud API Gateway server. which is for routing for appropriate service and check the user authenticaion and authorization. This service is consisted of authenticationFilter and optional authentication filter as well. Optional authentication filter is needed when user look up the products without login statement. and also There are authorization filters for each role. So this service offers flexible authentication and authorization.
@@ -94,6 +94,7 @@ https://www.erdcloud.com/d/PSD5Cgi6GrFQbdxgK
 
 
 
+## Contacts
 
 📫 How to reach me **rnwldnd7248@gmai.com**
 

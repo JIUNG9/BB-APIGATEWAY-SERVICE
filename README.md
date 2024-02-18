@@ -2,7 +2,8 @@
 # Blooming-blooms MICROSERVICE.API-GATEWAY
 
 ## Description
-This is the Spring cloud API Gateway server. which is for routing for appropriate service and check the user authenticaion and authorization. This service is consisted of authenticationFilter and optional authentication filter as well. Optional authentication filter is needed when user look up the products without login statement. and also There are authorization filters for each role. So this service offers flexible authentication and authorization.
+This is the Spring Cloud API Gateway server, which handles routing to appropriate services and checks user authentication and authorization. The service consists of an authentication filter and an optional authentication filter. The optional authentication filter is necessary when users look up products without logging in. Additionally, there are authorization filters for each role, providing flexible authentication and authorization.
+
 
 ## Getting Started
 
